@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Logo from "./Logo"
 import {
     BalloonHeart, 
@@ -18,10 +19,11 @@ import Search from "../Search";
 
 // export { Footer, , ,  }; - экспорт с несколькими объектами, в import также прописываем их import { Footer }
 
-const Header = ({user, upd, searchArr, setGoods, setSearchResult}) => {
+const Header = ({user, upd, searchArr, setGoods, setSearchResult, setModalOpen}) => {
     const login = () => {
-        localStorage.setItem("user", "Vasya")
-        upd("Vasya");
+        setModalOpen(true)
+        // localStorage.setItem("user", "Vasya")
+        // upd("Vasya");
     };
     const logout = () => {
         localStorage.removeItem("user")
@@ -39,15 +41,15 @@ const Header = ({user, upd, searchArr, setGoods, setSearchResult}) => {
             </div>
             <nav className="header__menu">
                 { user && <>
-                <a href="">
+                <Link to="/">
                     <BalloonHeart title="Избранное"/>
-                    </a>
-                <a href="">
+                    </Link>
+                <Link to="/">
                     <Cart4 title="Корзина"/>
-                </a>
-                <a href="">
+                </Link>
+                <Link to="/">
                     <PersonCircle title="Личный кабинет"/>
-                </a>
+                </Link>
                 </>}
                 <span>
                     {!user && <BuildingUp title="Войти" onClick={login}/>}
