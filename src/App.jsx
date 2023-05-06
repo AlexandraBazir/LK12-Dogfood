@@ -11,6 +11,8 @@ import { Header, Footer } from "./components/General";
 import Home from "./pages/Home";
 import Catalog from "./pages/Catalog";
 import OldPage from "./pages/Old";
+import Profile from "./pages/Profile"
+import Product from "./pages/Product";
 
 const App = () => {
   const [user, setUser] = useState(localStorage.getItem("user12"));
@@ -19,7 +21,7 @@ const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token12"));
   // Есть массив с товарами основной
   // Есть с товарами фильтруемый 
-  const [baseData, setBaseData] = useState([]); 
+  const [baseData, setBaseData] = useState([]);
   const [goods, setGoods] = useState(baseData);
   const [searchResult, setSearchResult] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -40,21 +42,21 @@ const App = () => {
     console.log("token", token);
     if (token) {
       fetch("https://api.react-learning.ru/products", {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-      setBaseData(data.products);
-    })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          setBaseData(data.products);
+        })
     }
   }, [token])
 
   useEffect(() => {
     setGoods(baseData)
-  },[baseData])
+  }, [baseData])
   return (
     <>
       <Header
@@ -65,17 +67,30 @@ const App = () => {
         setSearchResult={setSearchResult}
         setModalOpen={setModalOpen}
       />
+      <main>
         <Routes>
-          <Route path="/" element={<Home user={user} setActive={setModalOpen}/>}/>
-          <Route path="/catalog" element={<Catalog goods={goods}/>}/>
+          <Route path="/" element={<Home user={user} setActive={setModalOpen} />} />
+          <Route path="/catalog" element={<Catalog
+            goods={goods}
+            setBaseData={setBaseData}
+            userId={userId}
+          />} />
           <Route path="/old" element={
             <OldPage
               searchText={searchResult}
               goods={goods}
             />
           } />
+          <Route path="/profile" element={
+            <Profile user={user} setUser={setUser} />}
+          />
+          {/* :id - параметризованный запрос, где то, что идет 
+        после : является различными данными, которые можно 
+        вызвать при помощи свойства id */}
+          <Route path="/product/:id" element={<Product />} />
         </Routes>
-      <Footer/>
+      </main>
+      <Footer />
       <Modal
         isActive={modalOpen}
         setIsActive={setModalOpen}

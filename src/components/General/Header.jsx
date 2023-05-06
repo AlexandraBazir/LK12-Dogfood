@@ -4,8 +4,8 @@ import {
     BalloonHeart, 
     Cart4, 
     PersonCircle, 
-    BuildingUp, 
-    BuildingDown
+    BuildingUp
+    // BuildingDown
 } from "react-bootstrap-icons";
 
 import Search from "../Search";
@@ -25,10 +25,10 @@ const Header = ({user, upd, searchArr, setGoods, setSearchResult, setModalOpen})
         // localStorage.setItem("user", "Vasya")
         // upd("Vasya");
     };
-    const logout = () => {
-        localStorage.removeItem("user")
-        upd(null);
-    };
+    // const logout = () => {
+    //     localStorage.removeItem("user")
+    //     upd(null);
+    // };
     return (
         <header>
             <Logo />
@@ -47,13 +47,13 @@ const Header = ({user, upd, searchArr, setGoods, setSearchResult, setModalOpen})
                 <Link to="/">
                     <Cart4 title="Корзина"/>
                 </Link>
-                <Link to="/">
+                <Link to="/profile">
                     <PersonCircle title="Личный кабинет"/>
                 </Link>
                 </>}
                 <span>
                     {!user && <BuildingUp title="Войти" onClick={login}/>}
-                    {user && <BuildingDown title="Выйти"onClick={logout}/>}
+                    {/* {user && <BuildingDown title="Выйти"onClick={logout}/>} */}
                 </span>
             </nav>
         </header>
