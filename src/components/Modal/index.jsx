@@ -50,7 +50,7 @@ const Modal = ({
                 setISReg(false);
             }
         } else {
-            if (data?.token) {
+            if (data && data.token) {
                 localStorage.setItem("token12", data.token)
             }
             if (data?.data) {
@@ -68,7 +68,7 @@ const Modal = ({
     }
 
     return <div className="modal-wrapper" style={st}>
-        <div className="modal">
+        <div className="modal-lk">
             <button
                 className="modal-close"
                 onClick={(e) => setIsActive(false)}>
@@ -109,7 +109,9 @@ const Modal = ({
                     <button type="submit" disabled={isReg && (!pwd || pwd !== pwd2)}>
                         {isReg ? "Зарегистрироваться" : "Войти"}
                     </button>
-                    <a className="modal-link" onClick={changeForm}>{isReg ? "Войти" : "Зарегистрироваться"}</a>
+                    <a className="modal-link" onClick={changeForm}>
+                        {isReg ? "Войти" : "Зарегистрироваться"}
+                        </a>
                 </div>
             </form>
         </div>
