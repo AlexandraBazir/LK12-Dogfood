@@ -13,6 +13,7 @@ import Catalog from "./pages/Catalog";
 import OldPage from "./pages/Old";
 import Profile from "./pages/Profile"
 import Product from "./pages/Product";
+import AddProduct from "./pages/AddProduct";
 
 const App = () => {
   const [user, setUser] = useState(localStorage.getItem("user12"));
@@ -88,6 +89,7 @@ const App = () => {
         после : является различными данными, которые можно 
         вызвать при помощи свойства id */}
           <Route path="/product/:id" element={<Product />} />
+          <Route path="/add/product" element={<AddProduct/>} />
         </Routes>
       </main>
       <Footer />
