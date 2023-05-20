@@ -19,7 +19,7 @@ import Search from "../Search";
 
 // export { Footer, , ,  }; - экспорт с несколькими объектами, в import также прописываем их import { Footer }
 
-const Header = ({user, upd, searchArr, setGoods, setSearchResult, setModalOpen}) => {
+const Header = ({user, searchArr, setGoods, setModalOpen}) => {
     const login = () => {
         setModalOpen(true)
         // localStorage.setItem("user", "Vasya")
@@ -36,15 +36,14 @@ const Header = ({user, upd, searchArr, setGoods, setSearchResult, setModalOpen})
                 <Search
                 data={searchArr}
                 setGoods={setGoods}
-                setSearchResult={setSearchResult}
                 />
             </div>
             <nav className="header__menu">
                 { user && <>
-                <Link to="/">
+                <Link to="/favorites">
                     <BalloonHeart title="Избранное"/>
                     </Link>
-                <Link to="/">
+                <Link to="/cart">
                     <Cart4 title="Корзина"/>
                 </Link>
                 <Link to="/profile">

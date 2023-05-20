@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SuitHeart, SuitHeartFill } from "react-bootstrap-icons";
 import {Card, Button} from "react-bootstrap";
+import Ctx from "../../ctx";
 
 const BsCard = ({
     discount,
@@ -10,22 +11,31 @@ const BsCard = ({
     pictures,
     price,
     tags,
-    _id,
-    user,
-    setBaseData
+    _id
 }) => {
-    const [isLike, setIsLike] = useState(likes.includes(user));
+    const {setBaseData, userId, token} = useContext(Ctx);
+    const [isLike, setIsLike] = useState(likes?.includes(userId));
+    const [likeFlag, setLikeFlag] = useState(false);
     const likeHandler = () => {
         setIsLike(!isLike);
-        setBaseData((old) => old.map(el => {
-            if (el._id === _id) {
-                isLike
-                    ? el.likes = el.likes.filter(lk => lk !== user)
-                    : el.likes.push(user);
-            }
-            return el;
-        }))
+        setLikeFlag(true);
     }
+    useEffect(() => {
+        if (likeFlag) {
+        fetch(`https://api.react-learning.ru/products/likes/${_id}`, {
+            method: isLike ? "PUT" : "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            setLikeFlag(false);
+            setBaseData((old) => old.map(el => el._id === data._id ? data : el))
+        })
+    }
+    }, [isLike])
     // return (
     //     <div className="card pt-3" id={"pro_" + _id}>
     //         <span className="card-like" onClick={likeHandler}>
@@ -40,11 +50,10 @@ const BsCard = ({
     //         <Link to={`/product/${_id}`} className="card-link"></Link>
     //     </div>
     // )
-    return (
-            <Card className="pt-3 h-100" id={"pro_" + _id}>
-                <span className="card-like" onClick={likeHandler}>
+    return  <Card className="pt-3 h-100" id={"pro_" + _id}>
+                {userId && <span className="card-like" onClick={likeHandler}>
                     {isLike ? <SuitHeartFill /> : <SuitHeart />}
-                </span>
+                </span>}
                 <Card.Img variant="top" src={pictures} alt={name} className="w-auto align-self-center" height="100"/>
                 <Card.Body className="d-flex flex-column">
                     <Card.Title as="h4">{price} ₽</Card.Title>
@@ -53,7 +62,6 @@ const BsCard = ({
                 </Card.Body>
                 <Link to={`/product/${_id}`} className="card-link"></Link>
             </Card>
-        )
 }
 
 export default BsCard;

@@ -7,7 +7,7 @@ const Modal = ({
     setIsActive,
     setUser
 }) => {
-    const [isReg, setISReg] = useState(false);
+    const [isReg, setIsReg] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");
@@ -15,7 +15,7 @@ const Modal = ({
 
     const changeForm = (e) => {
         e.preventDefault();
-        setISReg(!isReg);
+        setIsReg(!isReg);
         clearForm();
     }
     const clearForm = () => {
@@ -46,17 +46,17 @@ const Modal = ({
         const data = await res.json();
         console.log(data);
         if (isReg) {
-            if (data._id) {
-                setISReg(false);
+            if (data?._id) {
+                setIsReg(false);
             }
         } else {
             if (data && data.token) {
                 localStorage.setItem("token12", data.token)
             }
             if (data?.data) {
-                localStorage.setItem("user", data.data.name);
+                localStorage.setItem("user12", data.data.name);
                 setUser(data.data.name);
-                localStorage.setItem("user-id", data.data._id);
+                localStorage.setItem("user12-id", data.data._id);
                 clearForm();
                 setIsActive(false);
             }

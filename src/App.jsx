@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import { Routes, Route } from "react-router-dom";
 // SPA - single page application - одностраничный сайт/приложение с одной страницей
 
 // import testData from "./assents/data.json";
-
+import Ctx from "./ctx";
 // Подключаем компоненты
 import Modal from "./components/Modal";
 import { Header, Footer } from "./components/General";
@@ -14,16 +14,19 @@ import OldPage from "./pages/Old";
 import Profile from "./pages/Profile"
 import Product from "./pages/Product";
 import AddProduct from "./pages/AddProduct";
+import Favorites from "./pages/Favorites";
 
 const App = () => {
   const [user, setUser] = useState(localStorage.getItem("user12"));
   // Сохрани в переменную user, то значение, что находится внутри useState
   const [userId, setUserId] = useState(localStorage.getItem("user12-id"));
+  console.log(userId);
   const [token, setToken] = useState(localStorage.getItem("token12"));
   // Есть массив с товарами основной
   // Есть с товарами фильтруемый 
   const [baseData, setBaseData] = useState([]);
   const [goods, setGoods] = useState(baseData);
+
   const [searchResult, setSearchResult] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -56,16 +59,36 @@ const App = () => {
   }, [token])
 
   useEffect(() => {
-    setGoods(baseData)
+    // setGoods(baseData)
   }, [baseData])
+
+  // const Ctx = createContext({});
+  // import {Ctx} from "./App"
+
+
   return (
-    <>
+    // объявляем контекст в приложении
+    // age = 2
+    // value = {
+    //   name: "User",
+    //   setName: function(){}
+    //   age тоже самое что age: age
+    // }
+    <Ctx.Provider value={{
+      searchResult,
+      setSearchResult,
+      setBaseData,
+      baseData,
+      goods,
+      setGoods,
+      userId,
+      token
+    }}>
       <Header
         user={user}
         upd={setUser}
         searchArr={baseData}
         setGoods={setGoods}
-        setSearchResult={setSearchResult}
         setModalOpen={setModalOpen}
       />
       <main>
@@ -73,23 +96,24 @@ const App = () => {
           <Route path="/" element={<Home user={user} setActive={setModalOpen} />} />
           <Route path="/catalog" element={<Catalog
             goods={goods}
-            setBaseData={setBaseData}
             userId={userId}
           />} />
           <Route path="/old" element={
             <OldPage
-              searchText={searchResult}
               goods={goods}
             />
           } />
           <Route path="/profile" element={
             <Profile user={user} setUser={setUser} />}
           />
+          <Route path="/favorites" element={
+            <Favorites/>}
+            />
           {/* :id - параметризованный запрос, где то, что идет 
         после : является различными данными, которые можно 
         вызвать при помощи свойства id */}
           <Route path="/product/:id" element={<Product />} />
-          <Route path="/add/product" element={<AddProduct/>} />
+          <Route path="/add/product" element={<AddProduct />} />
         </Routes>
       </main>
       <Footer />
@@ -98,7 +122,7 @@ const App = () => {
         setIsActive={setModalOpen}
         setUser={setUser}
       />
-    </>
+    </Ctx.Provider>
   )
 }
 
